@@ -79,111 +79,174 @@ public class TelaEmprestimo extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Informativo = new javax.swing.JLabel();
-        Emprestar = new javax.swing.JButton();
-        Devolver = new javax.swing.JButton();
+        Topo = new javax.swing.JPanel();
         Voltar = new javax.swing.JButton();
-        Usuário = new javax.swing.JLabel();
-        Livro = new javax.swing.JLabel();
+        Informativo = new javax.swing.JLabel();
+        PainelFormulario = new javax.swing.JPanel();
+        UsuárioLabel = new javax.swing.JLabel();
+        LivroLabel = new javax.swing.JLabel();
+        DataEmprestimoLabel = new javax.swing.JLabel();
+        DataPrevistaLabel = new javax.swing.JLabel();
         ComboBoxUsuário = new javax.swing.JComboBox<>();
         ComboBoxLivro = new javax.swing.JComboBox<>();
-        DataEmprestimoLabel = new javax.swing.JLabel();
         TextFieldDataEmprestimo = new javax.swing.JTextField();
-        DataPrevistaLabel = new javax.swing.JLabel();
         TextFieldDataPrevista = new javax.swing.JTextField();
         DicaData = new javax.swing.JLabel();
+        PainelBotoes = new javax.swing.JPanel();
+        Emprestar = new javax.swing.JButton();
+        Devolver = new javax.swing.JButton();
 
+        Informativo.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
+        Informativo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Informativo.setText("Empréstimo");
 
-        Emprestar.setText("Emprestar");
-        Emprestar.addActionListener(this::EmprestarActionPerformed);
-
-        Devolver.setText("Devolver");
-        Devolver.addActionListener(this::DevolverActionPerformed);
-
-        Voltar.setText("Voltar");
+        Voltar.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        Voltar.setText("← Voltar");
         Voltar.addActionListener(this::VoltarActionPerformed);
 
-        Usuário.setText("Usuário:");
+        javax.swing.GroupLayout TopoLayout = new javax.swing.GroupLayout(Topo);
+        Topo.setLayout(TopoLayout);
+        TopoLayout.setHorizontalGroup(
+            TopoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TopoLayout.createSequentialGroup()
+                .addComponent(Voltar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(Informativo)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(110, 110, 110))
+        );
+        TopoLayout.setVerticalGroup(
+            TopoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TopoLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(TopoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Voltar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Informativo))
+                .addGap(10, 10, 10))
+        );
 
-        Livro.setText("Livro:");
+        UsuárioLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        UsuárioLabel.setText("Usuário:");
 
-        ComboBoxUsuário.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { }));
+        LivroLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        LivroLabel.setText("Livro:");
 
-        ComboBoxLivro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { }));
-
+        DataEmprestimoLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         DataEmprestimoLabel.setText("Data Empréstimo:");
 
+        DataPrevistaLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         DataPrevistaLabel.setText("Devolução Prevista:");
+
+        ComboBoxUsuário.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        ComboBoxUsuário.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { }));
+
+        ComboBoxLivro.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        ComboBoxLivro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { }));
+
+        TextFieldDataEmprestimo.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+
+        TextFieldDataPrevista.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
 
         DicaData.setFont(new java.awt.Font("Segoe UI", 2, 10)); // NOI18N
         DicaData.setText("(formato dd/mm/aaaa)");
+
+        javax.swing.GroupLayout PainelFormularioLayout = new javax.swing.GroupLayout(PainelFormulario);
+        PainelFormulario.setLayout(PainelFormularioLayout);
+        PainelFormularioLayout.setHorizontalGroup(
+            PainelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+            .addGroup(PainelFormularioLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(PainelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(UsuárioLabel)
+                    .addComponent(LivroLabel)
+                    .addComponent(DataEmprestimoLabel)
+                    .addComponent(DataPrevistaLabel))
+                .addGap(18, 18, 18)
+                .addGroup(PainelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ComboBoxUsuário, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ComboBoxLivro, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TextFieldDataEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TextFieldDataPrevista, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(DicaData))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        PainelFormularioLayout.setVerticalGroup(
+            PainelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelFormularioLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(PainelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(UsuárioLabel)
+                    .addComponent(ComboBoxUsuário, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addGroup(PainelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LivroLabel)
+                    .addComponent(ComboBoxLivro, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addGroup(PainelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(DataEmprestimoLabel)
+                    .addComponent(TextFieldDataEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addGroup(PainelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(DataPrevistaLabel)
+                    .addComponent(TextFieldDataPrevista, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(DicaData)
+                .addGap(10, 10, 10))
+        );
+
+        Emprestar.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        Emprestar.setText("Emprestar");
+        Emprestar.addActionListener(this::EmprestarActionPerformed);
+
+        Devolver.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        Devolver.setText("Devolver");
+        Devolver.addActionListener(this::DevolverActionPerformed);
+
+        javax.swing.GroupLayout PainelBotoesLayout = new javax.swing.GroupLayout(PainelBotoes);
+        PainelBotoes.setLayout(PainelBotoesLayout);
+        PainelBotoesLayout.setHorizontalGroup(
+            PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelBotoesLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(Emprestar, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addComponent(Devolver, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        PainelBotoesLayout.setVerticalGroup(
+            PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelBotoesLayout.createSequentialGroup()
+                .addGroup(PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Emprestar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Devolver, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(Voltar))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(Emprestar)
-                                .addGap(70, 70, 70)
-                                .addComponent(Devolver))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(Usuário)
-                                    .addComponent(Livro)
-                                    .addComponent(DataEmprestimoLabel)
-                                    .addComponent(DataPrevistaLabel))
-                                .addGap(20, 20, 20)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(ComboBoxUsuário, 0, 170, Short.MAX_VALUE)
-                                    .addComponent(ComboBoxLivro, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(TextFieldDataEmprestimo)
-                                    .addComponent(TextFieldDataPrevista)
-                                    .addComponent(DicaData)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(157, 157, 157)
-                        .addComponent(Informativo)))
-                .addContainerGap(60, Short.MAX_VALUE))
+                    .addComponent(Topo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(PainelFormulario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(PainelBotoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(Informativo)
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Usuário)
-                    .addComponent(ComboBoxUsuário, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Livro)
-                    .addComponent(ComboBoxLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(DataEmprestimoLabel)
-                    .addComponent(TextFieldDataEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(DataPrevistaLabel)
-                    .addComponent(TextFieldDataPrevista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
-                .addComponent(DicaData)
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Emprestar)
-                    .addComponent(Devolver))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
-                .addComponent(Voltar)
+                .addContainerGap()
+                .addComponent(Topo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(PainelFormulario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addComponent(PainelBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        this.setPreferredSize(new java.awt.Dimension(800, 560));
     }// </editor-fold>//GEN-END:initComponents
 
     private void EmprestarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmprestarActionPerformed
@@ -284,7 +347,7 @@ public class TelaEmprestimo extends javax.swing.JPanel {
 
         String msg = "Livro \"" + emp.getLivro().getNome() + "\" devolvido em " + dataDev.format(FORMATO_DATA) + "!";
         if (dataDev.isAfter(emp.getDataPrevistaDevolucao())) {
-            msg += "\nAtencao: devolucao em atraso (prevista: " + emp.getDataPrevistaDevolucao().format(FORMATO_DATA) + ")";
+            msg += "\nAtenção: devolução em atraso (prevista: " + emp.getDataPrevistaDevolucao().format(FORMATO_DATA) + ")";
         }
 
         JOptionPane.showMessageDialog(this, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
@@ -294,8 +357,7 @@ public class TelaEmprestimo extends javax.swing.JPanel {
     private void VoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VoltarActionPerformed
         java.awt.Container parent = this.getParent();
         parent.remove(this);
-        TelaUsuarios telaUsuarios = new TelaUsuarios();
-        parent.add(telaUsuarios);
+        parent.add(new TelaUsuarios());
         parent.revalidate();
         parent.repaint();
     }//GEN-LAST:event_VoltarActionPerformed
@@ -309,10 +371,13 @@ public class TelaEmprestimo extends javax.swing.JPanel {
     private javax.swing.JLabel DicaData;
     private javax.swing.JButton Emprestar;
     private javax.swing.JLabel Informativo;
-    private javax.swing.JLabel Livro;
+    private javax.swing.JLabel LivroLabel;
+    private javax.swing.JPanel PainelBotoes;
+    private javax.swing.JPanel PainelFormulario;
     private javax.swing.JTextField TextFieldDataEmprestimo;
     private javax.swing.JTextField TextFieldDataPrevista;
-    private javax.swing.JLabel Usuário;
+    private javax.swing.JPanel Topo;
+    private javax.swing.JLabel UsuárioLabel;
     private javax.swing.JButton Voltar;
     // End of variables declaration//GEN-END:variables
 }

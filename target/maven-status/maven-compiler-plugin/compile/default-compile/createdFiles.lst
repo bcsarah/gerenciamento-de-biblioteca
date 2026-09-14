@@ -4,6 +4,7 @@ com\mycompany\gerenciamento\de\biblioteca\TelaInicial.class
 com\mycompany\gerenciamento\de\biblioteca\TelaLivros.class
 com\mycompany\gerenciamento\de\biblioteca\Usuario.class
 com\mycompany\gerenciamento\de\biblioteca\TelaRelatorios$1.class
+com\mycompany\gerenciamento\de\biblioteca\TelaRelatorios$3.class
 com\mycompany\gerenciamento\de\biblioteca\TelaUsuarios$1.class
 com\mycompany\gerenciamento\de\biblioteca\TelaUsuarios.class
 com\mycompany\gerenciamento\de\biblioteca\TelaCadastrarUsuarios.class

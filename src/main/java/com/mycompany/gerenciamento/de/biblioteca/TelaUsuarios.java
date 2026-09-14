@@ -121,7 +121,8 @@ public class TelaUsuarios extends javax.swing.JPanel {
         TabelaUsuários = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
-        Informativo.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        Informativo.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
+        Informativo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Informativo.setText("Usuários");
 
         Voltar.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
@@ -134,9 +135,10 @@ public class TelaUsuarios extends javax.swing.JPanel {
             TopoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TopoLayout.createSequentialGroup()
                 .addComponent(Voltar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(Informativo)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(110, 110, 110))
         );
         TopoLayout.setVerticalGroup(
             TopoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -165,20 +167,21 @@ public class TelaUsuarios extends javax.swing.JPanel {
         PainelBotoesLayout.setHorizontalGroup(
             PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PainelBotoesLayout.createSequentialGroup()
-                .addComponent(Cadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
-                .addComponent(Remover, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
-                .addComponent(Empréstimo, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(Cadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(Remover, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(Empréstimo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         PainelBotoesLayout.setVerticalGroup(
             PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PainelBotoesLayout.createSequentialGroup()
                 .addGroup(PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Cadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Remover, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Empréstimo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(Cadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Remover, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Empréstimo, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         ListaLabel.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N

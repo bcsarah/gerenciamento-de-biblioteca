@@ -24,54 +24,56 @@ public class TelaInicial extends javax.swing.JPanel {
         UsuariosButton = new javax.swing.JButton();
         RelatoriosButton = new javax.swing.JButton();
 
-        Informativo.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
+        Informativo.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        Informativo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Informativo.setText("Gerenciamento de Biblioteca");
 
-        Subtitulo.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        Subtitulo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        Subtitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Subtitulo.setText("Escolha uma opção para começar");
 
-        LivrosButton.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        LivrosButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         LivrosButton.setText("Livros");
         LivrosButton.addActionListener(this::LivrosButtonActionPerformed);
 
-        UsuariosButton.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        UsuariosButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         UsuariosButton.setText("Usuários");
         UsuariosButton.addActionListener(this::UsuariosButtonActionPerformed);
 
-        RelatoriosButton.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        RelatoriosButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         RelatoriosButton.setText("Relatórios");
         RelatoriosButton.addActionListener(this::RelatoriosButtonActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+            .addComponent(Informativo, javax.swing.GroupLayout.DEFAULT_SIZE,
+                          javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Subtitulo, javax.swing.GroupLayout.DEFAULT_SIZE,
+                          javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Informativo)
-                    .addComponent(Subtitulo)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(LivrosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(UsuariosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(RelatoriosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(LivrosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addComponent(UsuariosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addComponent(RelatoriosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(100, 100, 100)
+                .addGap(0, 100, Short.MAX_VALUE)
                 .addComponent(Informativo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Subtitulo)
-                .addGap(40, 40, 40)
+                .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(LivrosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(UsuariosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(RelatoriosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(150, Short.MAX_VALUE))
+                    .addComponent(LivrosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(UsuariosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(RelatoriosButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 100, Short.MAX_VALUE))
         );
 
         this.setPreferredSize(new java.awt.Dimension(800, 560));

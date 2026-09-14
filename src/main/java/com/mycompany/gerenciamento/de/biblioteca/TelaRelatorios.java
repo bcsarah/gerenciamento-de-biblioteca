@@ -25,6 +25,7 @@ public class TelaRelatorios extends javax.swing.JPanel {
     public TelaRelatorios() {
         initComponents();
         atualizarResumo();
+        carregarTodosEmprestimos(); // já mostra todos ao abrir
     }
 
     private void atualizarResumo() {
@@ -41,6 +42,33 @@ public class TelaRelatorios extends javax.swing.JPanel {
         LabelDisponiveis.setText("Disponíveis: " + disponiveis);
         LabelEmprestados.setText("Emprestados: " + emprestados);
         LabelTotalUsuarios.setText("Total de usuários: " + totalUsuarios);
+    }
+
+    // Preenche a tabela com TODOS os empréstimos ativos
+    private void carregarTodosEmprestimos() {
+        DefaultTableModel modelo = new DefaultTableModel(
+            new Object[][]{},
+            new String[]{"Livro", "Usuário", "Data Empréstimo", "Devolução Prevista"}
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        List<Usuario> usuarios = TelaUsuarios.getUsuarios();
+        for (Usuario u : usuarios) {
+            for (Emprestimo e : u.getEmprestimosAtivos()) {
+                modelo.addRow(new Object[]{
+                    e.getLivro().getNome(),
+                    u.getNome(),
+                    e.getDataEmprestimo().format(FORMATO_DATA),
+                    e.getDataPrevistaDevolucao().format(FORMATO_DATA)
+                });
+            }
+        }
+
+        jTable1.setModel(modelo);
     }
 
     private File escolherArquivo(String nomeSugerido) {
@@ -134,14 +162,26 @@ public class TelaRelatorios extends javax.swing.JPanel {
         escreverArquivo(f, sb.toString());
     }
 
+    // Exporta empréstimos; se mes == -1, exporta TODOS
     private void exportarEmprestimos(int mes, int ano) {
-        File f = escolherArquivo(String.format("relatorio_emprestimos_%02d_%d.txt", mes, ano));
+        String nomeArquivo;
+        String periodoTexto;
+
+        if (mes == -1) {
+            nomeArquivo = "relatorio_emprestimos_todos.txt";
+            periodoTexto = "TODOS OS PERÍODOS";
+        } else {
+            nomeArquivo = String.format("relatorio_emprestimos_%02d_%d.txt", mes, ano);
+            periodoTexto = String.format("%02d/%d", mes, ano);
+        }
+
+        File f = escolherArquivo(nomeArquivo);
         if (f == null) return;
 
         StringBuilder sb = new StringBuilder();
         sb.append("==================================================\n");
         sb.append("       RELATÓRIO DE EMPRÉSTIMOS\n");
-        sb.append("       Período: ").append(String.format("%02d/%d", mes, ano)).append("\n");
+        sb.append("       Período: ").append(periodoTexto).append("\n");
         sb.append("       Emitido em: ").append(LocalDate.now().format(FORMATO_DATA)).append("\n");
         sb.append("==================================================\n\n");
 
@@ -150,8 +190,16 @@ public class TelaRelatorios extends javax.swing.JPanel {
 
         for (Usuario u : usuarios) {
             for (Emprestimo e : u.getEmprestimosAtivos()) {
-                if (e.getDataPrevistaDevolucao().getMonthValue() == mes
-                        && e.getDataPrevistaDevolucao().getYear() == ano) {
+
+                boolean incluir;
+                if (mes == -1) {
+                    incluir = true;
+                } else {
+                    incluir = (e.getDataPrevistaDevolucao().getMonthValue() == mes
+                            && e.getDataPrevistaDevolucao().getYear() == ano);
+                }
+
+                if (incluir) {
                     contador++;
                     sb.append(contador).append(". Livro: ").append(e.getLivro().getNome()).append("\n");
                     sb.append("   Usuário: ").append(u.getNome()).append("\n");
@@ -163,7 +211,7 @@ public class TelaRelatorios extends javax.swing.JPanel {
         }
 
         sb.append("--------------------------------------------------\n");
-        sb.append("Total de empréstimos no período: ").append(contador).append("\n");
+        sb.append("Total de empréstimos: ").append(contador).append("\n");
 
         escreverArquivo(f, sb.toString());
     }
@@ -194,11 +242,14 @@ public class TelaRelatorios extends javax.swing.JPanel {
         TextFieldAno = new javax.swing.JTextField();
         BtnBuscar = new javax.swing.JButton();
         BtnExportarEmp = new javax.swing.JButton();
+        BtnMostrarTodos = new javax.swing.JButton();
         Instrucao = new javax.swing.JLabel();
+        Aviso = new javax.swing.JLabel();
         TabelaScroll = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
-        Informativo.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        Informativo.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
+        Informativo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Informativo.setText("Relatórios");
 
         Voltar.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
@@ -211,9 +262,10 @@ public class TelaRelatorios extends javax.swing.JPanel {
             TopoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TopoLayout.createSequentialGroup()
                 .addComponent(Voltar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(Informativo)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(110, 110, 110))
         );
         TopoLayout.setVerticalGroup(
             TopoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,6 +294,7 @@ public class TelaRelatorios extends javax.swing.JPanel {
         PainelResumoLayout.setHorizontalGroup(
             PainelResumoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PainelResumoLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(LabelTotalLivros)
                 .addGap(30, 30, 30)
                 .addComponent(LabelDisponiveis)
@@ -279,17 +332,17 @@ public class TelaRelatorios extends javax.swing.JPanel {
         PainelBotoesLayout.setHorizontalGroup(
             PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PainelBotoesLayout.createSequentialGroup()
-                .addComponent(BtnRelUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
-                .addComponent(BtnRelLivros, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(BtnRelUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(BtnRelLivros, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         PainelBotoesLayout.setVerticalGroup(
             PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelBotoesLayout.createSequentialGroup()
-                .addGroup(PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnRelUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BtnRelLivros, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(BtnRelUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(BtnRelLivros, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         TituloEmprestimos.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
@@ -313,27 +366,41 @@ public class TelaRelatorios extends javax.swing.JPanel {
         BtnExportarEmp.setText("Exportar período");
         BtnExportarEmp.addActionListener(this::BtnExportarEmpActionPerformed);
 
+        BtnMostrarTodos.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        BtnMostrarTodos.setText("Mostrar todos");
+        BtnMostrarTodos.addActionListener(this::BtnMostrarTodosActionPerformed);
+
         Instrucao.setFont(new java.awt.Font("Segoe UI", 2, 10)); // NOI18N
         Instrucao.setText("(mês de 1 a 12, ano com 4 dígitos)");
+
+        Aviso.setFont(new java.awt.Font("Segoe UI", 2, 10)); // NOI18N
+        Aviso.setForeground(new java.awt.Color(120, 120, 120));
+        Aviso.setText("Deixe o mês/ano em branco e clique em Exportar para gerar o relatório de TODOS os empréstimos.");
 
         javax.swing.GroupLayout PainelFiltroLayout = new javax.swing.GroupLayout(PainelFiltro);
         PainelFiltro.setLayout(PainelFiltroLayout);
         PainelFiltroLayout.setHorizontalGroup(
             PainelFiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PainelFiltroLayout.createSequentialGroup()
-                .addComponent(MesLabel)
-                .addGap(5, 5, 5)
-                .addComponent(TextFieldMes, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
-                .addComponent(AnoLabel)
-                .addGap(5, 5, 5)
-                .addComponent(TextFieldAno, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
-                .addComponent(BtnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
-                .addComponent(BtnExportarEmp, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
-                .addComponent(Instrucao)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(PainelFiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PainelFiltroLayout.createSequentialGroup()
+                        .addComponent(MesLabel)
+                        .addGap(5, 5, 5)
+                        .addComponent(TextFieldMes, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)
+                        .addComponent(AnoLabel)
+                        .addGap(5, 5, 5)
+                        .addComponent(TextFieldAno, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)
+                        .addComponent(BtnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)
+                        .addComponent(BtnExportarEmp, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)
+                        .addComponent(BtnMostrarTodos, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)
+                        .addComponent(Instrucao))
+                    .addComponent(Aviso))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         PainelFiltroLayout.setVerticalGroup(
@@ -347,7 +414,10 @@ public class TelaRelatorios extends javax.swing.JPanel {
                     .addComponent(TextFieldAno, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BtnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BtnExportarEmp, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnMostrarTodos, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Instrucao))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Aviso)
                 .addGap(5, 5, 5))
         );
 
@@ -436,12 +506,24 @@ public class TelaRelatorios extends javax.swing.JPanel {
         exportarLivros();
     }//GEN-LAST:event_BtnRelLivrosActionPerformed
 
+    private void BtnMostrarTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnMostrarTodosActionPerformed
+        TextFieldMes.setText("");
+        TextFieldAno.setText("");
+        carregarTodosEmprestimos();
+    }//GEN-LAST:event_BtnMostrarTodosActionPerformed
+
     private void BtnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarActionPerformed
         String mesStr = TextFieldMes.getText().trim();
         String anoStr = TextFieldAno.getText().trim();
 
+        // Se ambos vazios, mostra todos
+        if (mesStr.isEmpty() && anoStr.isEmpty()) {
+            carregarTodosEmprestimos();
+            return;
+        }
+
         if (mesStr.isEmpty() || anoStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Preencha o mês e o ano!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Preencha o mês E o ano, ou deixe ambos em branco para mostrar todos.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -498,8 +580,14 @@ public class TelaRelatorios extends javax.swing.JPanel {
         String mesStr = TextFieldMes.getText().trim();
         String anoStr = TextFieldAno.getText().trim();
 
+        // Se ambos vazios → exportar TODOS
+        if (mesStr.isEmpty() && anoStr.isEmpty()) {
+            exportarEmprestimos(-1, -1);
+            return;
+        }
+
         if (mesStr.isEmpty() || anoStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Preencha o mês e o ano para exportar!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Preencha o mês E o ano, ou deixe ambos em branco para exportar todos.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -522,8 +610,10 @@ public class TelaRelatorios extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel AnoLabel;
+    private javax.swing.JLabel Aviso;
     private javax.swing.JButton BtnBuscar;
     private javax.swing.JButton BtnExportarEmp;
+    private javax.swing.JButton BtnMostrarTodos;
     private javax.swing.JButton BtnRelLivros;
     private javax.swing.JButton BtnRelUsuarios;
     private javax.swing.JLabel Informativo;
