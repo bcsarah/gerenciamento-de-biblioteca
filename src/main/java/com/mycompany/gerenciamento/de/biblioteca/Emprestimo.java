@@ -11,7 +11,7 @@ public class Emprestimo {
     private Usuario usuario;
     private LocalDate dataEmprestimo;
     private LocalDate dataPrevistaDevolucao;
-    private LocalDate dataDevolucao; // null enquanto não devolvido
+    private LocalDate dataDevolucao;
 
     public Emprestimo(Livro livro, Usuario usuario, LocalDate dataEmprestimo, LocalDate dataPrevistaDevolucao) {
         this.livro = livro;
@@ -34,4 +34,9 @@ public class Emprestimo {
     public void setDataDevolucao(LocalDate dataDevolucao) { this.dataDevolucao = dataDevolucao; }
 
     public boolean isDevolvido() { return dataDevolucao != null; }
+
+    // Está atrasado se ainda não foi devolvido e a data prevista já passou
+    public boolean isAtrasado() {
+        return !isDevolvido() && dataPrevistaDevolucao.isBefore(LocalDate.now());
+    }
 }

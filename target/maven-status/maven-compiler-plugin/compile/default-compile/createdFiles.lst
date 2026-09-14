@@ -5,7 +5,9 @@ com\mycompany\gerenciamento\de\biblioteca\TelaLivros.class
 com\mycompany\gerenciamento\de\biblioteca\Usuario.class
 com\mycompany\gerenciamento\de\biblioteca\TelaRelatorios$1.class
 com\mycompany\gerenciamento\de\biblioteca\TelaRelatorios$3.class
+com\mycompany\gerenciamento\de\biblioteca\TelaHistorico$2.class
 com\mycompany\gerenciamento\de\biblioteca\TelaUsuarios$1.class
+com\mycompany\gerenciamento\de\biblioteca\TelaHistorico.class
 com\mycompany\gerenciamento\de\biblioteca\TelaUsuarios.class
 com\mycompany\gerenciamento\de\biblioteca\TelaCadastrarUsuarios.class
 com\mycompany\gerenciamento\de\biblioteca\Livro.class
@@ -13,9 +15,12 @@ com\mycompany\gerenciamento\de\biblioteca\Emprestimo.class
 com\mycompany\gerenciamento\de\biblioteca\TelaLivros$2.class
 com\mycompany\gerenciamento\de\biblioteca\TelaUsuarios$2.class
 com\mycompany\gerenciamento\de\biblioteca\TelaEmprestimo.class
+com\mycompany\gerenciamento\de\biblioteca\TelaLivros$4.class
 com\mycompany\gerenciamento\de\biblioteca\EstiloUI.class
 com\mycompany\gerenciamento\de\biblioteca\TelaRelatorios$2.class
 com\mycompany\gerenciamento\de\biblioteca\GerenciamentoDeBiblioteca.class
+com\mycompany\gerenciamento\de\biblioteca\TelaUsuarios$4.class
+com\mycompany\gerenciamento\de\biblioteca\TelaHistorico$1.class
 com\mycompany\gerenciamento\de\biblioteca\TelaRelatorios.class
 com\mycompany\gerenciamento\de\biblioteca\TelaLivros$1.class
 com\mycompany\gerenciamento\de\biblioteca\TelaCadastrarLivros.class

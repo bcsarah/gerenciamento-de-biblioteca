@@ -18,9 +18,6 @@ public class TelaEmprestimo extends javax.swing.JPanel {
 
     private static final DateTimeFormatter FORMATO_DATA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    /**
-     * Creates new form TelaEmpréstimo
-     */
     public TelaEmprestimo() {
         initComponents();
         carregarDados();
@@ -46,8 +43,8 @@ public class TelaEmprestimo extends javax.swing.JPanel {
         boolean temLivros = ComboBoxLivro.getItemCount() > 0;
         Emprestar.setEnabled(temUsuarios && temLivros);
         Devolver.setEnabled(temUsuarios);
+        Renovar.setEnabled(temUsuarios);
 
-        // Preenche as datas padrão
         TextFieldDataEmprestimo.setText(LocalDate.now().format(FORMATO_DATA));
         TextFieldDataPrevista.setText(LocalDate.now().plusDays(7).format(FORMATO_DATA));
     }
@@ -94,6 +91,7 @@ public class TelaEmprestimo extends javax.swing.JPanel {
         DicaData = new javax.swing.JLabel();
         PainelBotoes = new javax.swing.JPanel();
         Emprestar = new javax.swing.JButton();
+        Renovar = new javax.swing.JButton();
         Devolver = new javax.swing.JButton();
 
         Informativo.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
@@ -144,7 +142,6 @@ public class TelaEmprestimo extends javax.swing.JPanel {
         ComboBoxLivro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { }));
 
         TextFieldDataEmprestimo.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-
         TextFieldDataPrevista.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
 
         DicaData.setFont(new java.awt.Font("Segoe UI", 2, 10)); // NOI18N
@@ -198,6 +195,10 @@ public class TelaEmprestimo extends javax.swing.JPanel {
         Emprestar.setText("Emprestar");
         Emprestar.addActionListener(this::EmprestarActionPerformed);
 
+        Renovar.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        Renovar.setText("Renovar");
+        Renovar.addActionListener(this::RenovarActionPerformed);
+
         Devolver.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         Devolver.setText("Devolver");
         Devolver.addActionListener(this::DevolverActionPerformed);
@@ -208,17 +209,19 @@ public class TelaEmprestimo extends javax.swing.JPanel {
             PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PainelBotoesLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(Emprestar, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
-                .addComponent(Devolver, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Emprestar, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(Renovar, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(Devolver, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         PainelBotoesLayout.setVerticalGroup(
             PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelBotoesLayout.createSequentialGroup()
-                .addGroup(PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Emprestar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Devolver, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(Emprestar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Renovar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Devolver, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -294,7 +297,7 @@ public class TelaEmprestimo extends javax.swing.JPanel {
         carregarDados();
     }//GEN-LAST:event_EmprestarActionPerformed
 
-    private void DevolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DevolverActionPerformed
+    private void RenovarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RenovarActionPerformed
         Usuario usuario = getUsuarioSelecionado();
 
         if (usuario == null) {
@@ -312,6 +315,69 @@ public class TelaEmprestimo extends javax.swing.JPanel {
         for (int i = 0; i < ativos.size(); i++) {
             Emprestimo e = ativos.get(i);
             opcoes[i] = e.getLivro().getNome() + " (prev.: " + e.getDataPrevistaDevolucao().format(FORMATO_DATA) + ")";
+        }
+
+        String selecao = (String) JOptionPane.showInputDialog(
+            this, "Selecione o livro para renovar:", "Renovação",
+            JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+
+        if (selecao == null) return;
+
+        int idx = 0;
+        for (int i = 0; i < opcoes.length; i++) {
+            if (opcoes[i].equals(selecao)) { idx = i; break; }
+        }
+        Emprestimo emp = ativos.get(idx);
+
+        String dataStr = JOptionPane.showInputDialog(
+            this,
+            "Nova data de devolução (dd/mm/aaaa):",
+            emp.getDataPrevistaDevolucao().plusDays(7).format(FORMATO_DATA)
+        );
+
+        if (dataStr == null) return;
+
+        LocalDate novaData;
+        try {
+            novaData = LocalDate.parse(dataStr.trim(), FORMATO_DATA);
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this, "Data inválida! Use o formato dd/mm/aaaa.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (novaData.isBefore(emp.getDataPrevistaDevolucao())) {
+            JOptionPane.showMessageDialog(this, "A nova data deve ser posterior à atual (" + emp.getDataPrevistaDevolucao().format(FORMATO_DATA) + ").", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        emp.setDataPrevistaDevolucao(novaData);
+
+        JOptionPane.showMessageDialog(this,
+            "Empréstimo renovado!\nNova devolução prevista: " + novaData.format(FORMATO_DATA),
+            "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+        carregarDados();
+    }//GEN-LAST:event_RenovarActionPerformed
+
+    private void DevolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DevolverActionPerformed
+        Usuario usuario = getUsuarioSelecionado();
+
+        if (usuario == null) {
+            JOptionPane.showMessageDialog(this, "Selecione um usuário!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        List<Emprestimo> ativos = usuario.getEmprestimosAtivos();
+        if (ativos.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Este usuário não possui livros emprestados!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String[] opcoes = new String[ativos.size()];
+        for (int i = 0; i < ativos.size(); i++) {
+            Emprestimo e = ativos.get(i);
+            String atraso = e.isAtrasado() ? " [ATRASADO]" : "";
+            opcoes[i] = e.getLivro().getNome() + " (prev.: " + e.getDataPrevistaDevolucao().format(FORMATO_DATA) + ")" + atraso;
         }
 
         String selecao = (String) JOptionPane.showInputDialog(
@@ -374,6 +440,7 @@ public class TelaEmprestimo extends javax.swing.JPanel {
     private javax.swing.JLabel LivroLabel;
     private javax.swing.JPanel PainelBotoes;
     private javax.swing.JPanel PainelFormulario;
+    private javax.swing.JButton Renovar;
     private javax.swing.JTextField TextFieldDataEmprestimo;
     private javax.swing.JTextField TextFieldDataPrevista;
     private javax.swing.JPanel Topo;

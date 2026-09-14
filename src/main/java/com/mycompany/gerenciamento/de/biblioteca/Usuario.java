@@ -36,25 +36,20 @@ public class Usuario {
 
     public List<Emprestimo> getEmprestimosLista() { return emprestimos; }
 
-    // Retorna apenas os empréstimos ativos (não devolvidos)
     public List<Emprestimo> getEmprestimosAtivos() {
         List<Emprestimo> ativos = new ArrayList<>();
-        for (Emprestimo e : emprestimos) {
-            if (!e.isDevolvido()) ativos.add(e);
-        }
+        for (Emprestimo e : emprestimos) if (!e.isDevolvido()) ativos.add(e);
         return ativos;
     }
 
-    // Conta empréstimos ativos
-    public int getEmprestimos() {
-        return getEmprestimosAtivos().size();
+    public List<Emprestimo> getHistorico() {
+        List<Emprestimo> hist = new ArrayList<>();
+        for (Emprestimo e : emprestimos) if (e.isDevolvido()) hist.add(e);
+        return hist;
     }
 
-    public void adicionarEmprestimo(Emprestimo e) {
-        emprestimos.add(e);
-    }
+    public int getEmprestimos() { return getEmprestimosAtivos().size(); }
 
-    public void removerEmprestimo(Emprestimo e) {
-        emprestimos.remove(e);
-    }
+    public void adicionarEmprestimo(Emprestimo e) { emprestimos.add(e); }
+    public void removerEmprestimo(Emprestimo e) { emprestimos.remove(e); }
 }

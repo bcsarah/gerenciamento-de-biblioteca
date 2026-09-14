@@ -5,6 +5,8 @@
 package com.mycompany.gerenciamento.de.biblioteca;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import javax.swing.RowFilter;
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ public class TelaUsuarios extends javax.swing.JPanel {
 
     private static List<Usuario> usuarios = new ArrayList<>();
     private DefaultTableModel modeloTabela;
+    private TableRowSorter<DefaultTableModel> sorter;
     private static final DateTimeFormatter FORMATO_DATA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public TelaUsuarios() {
@@ -69,6 +72,19 @@ public class TelaUsuarios extends javax.swing.JPanel {
         }
 
         jTable1.setModel(modeloTabela);
+
+        sorter = new TableRowSorter<>(modeloTabela);
+        jTable1.setRowSorter(sorter);
+        aplicarFiltro();
+    }
+
+    private void aplicarFiltro() {
+        String texto = TextFieldBusca.getText().trim();
+        if (texto.isEmpty()) {
+            sorter.setRowFilter(null);
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + java.util.regex.Pattern.quote(texto)));
+        }
     }
 
     @Override
@@ -78,31 +94,89 @@ public class TelaUsuarios extends javax.swing.JPanel {
     }
 
     private void removerUsuarioSelecionado() {
-        int linhaSelecionada = jTable1.getSelectedRow();
-        if (linhaSelecionada == -1) {
+        int linhaView = jTable1.getSelectedRow();
+        if (linhaView == -1) {
             JOptionPane.showMessageDialog(this, "Selecione um usuário para remover!", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        String nomeUsuario = (String) jTable1.getValueAt(linhaSelecionada, 0);
+        int linhaModelo = jTable1.convertRowIndexToModel(linhaView);
+        String nomeUsuario = (String) jTable1.getModel().getValueAt(linhaModelo, 0);
+
         int confirmacao = JOptionPane.showConfirmDialog(this,
             "Tem certeza que deseja remover o usuário \"" + nomeUsuario + "\"?",
             "Confirmar Remoção", JOptionPane.YES_NO_OPTION);
 
         if (confirmacao == JOptionPane.YES_OPTION) {
-            usuarios.remove(linhaSelecionada);
+            usuarios.remove(linhaModelo);
             atualizarTabela();
             JOptionPane.showMessageDialog(this, "Usuário removido com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    private void editarUsuarioSelecionado() {
+        int linhaView = jTable1.getSelectedRow();
+        if (linhaView == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um usuário para editar!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int linhaModelo = jTable1.convertRowIndexToModel(linhaView);
+        Usuario usuario = usuarios.get(linhaModelo);
+
+        String novoNome = JOptionPane.showInputDialog(this, "Nome:", usuario.getNome());
+        if (novoNome == null) return;
+
+        String novoCpf = JOptionPane.showInputDialog(this, "CPF:", usuario.getCpf());
+        if (novoCpf == null) return;
+
+        String novoTelefone = JOptionPane.showInputDialog(this, "Telefone:", usuario.getTelefone());
+        if (novoTelefone == null) return;
+
+        String novoEmail = JOptionPane.showInputDialog(this, "Email:", usuario.getEmail());
+        if (novoEmail == null) return;
+
+        usuario.setNome(novoNome.trim());
+        usuario.setCpf(novoCpf.trim());
+        usuario.setTelefone(novoTelefone.trim());
+        usuario.setEmail(novoEmail.trim());
+
+        atualizarTabela();
+        JOptionPane.showMessageDialog(this, "Usuário atualizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void verHistoricoSelecionado() {
+        int linhaView = jTable1.getSelectedRow();
+        if (linhaView == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um usuário para ver o histórico!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int linhaModelo = jTable1.convertRowIndexToModel(linhaView);
+        Usuario usuario = usuarios.get(linhaModelo);
+
+        java.awt.Container parent = this.getParent();
+        parent.remove(this);
+        parent.add(new TelaHistorico(usuario));
+        parent.revalidate();
+        parent.repaint();
     }
 
     private void RemoverActionPerformed(java.awt.event.ActionEvent evt) {
         removerUsuarioSelecionado();
     }
 
+    private void EditarActionPerformed(java.awt.event.ActionEvent evt) {
+        editarUsuarioSelecionado();
+    }
+
+    private void HistoricoActionPerformed(java.awt.event.ActionEvent evt) {
+        verHistoricoSelecionado();
+    }
+
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {
         if (evt.getClickCount() == 2) {
-            removerUsuarioSelecionado();
+            editarUsuarioSelecionado();
         }
     }
 
@@ -113,9 +187,14 @@ public class TelaUsuarios extends javax.swing.JPanel {
         Topo = new javax.swing.JPanel();
         Voltar = new javax.swing.JButton();
         Informativo = new javax.swing.JLabel();
+        PainelBusca = new javax.swing.JPanel();
+        BuscaLabel = new javax.swing.JLabel();
+        TextFieldBusca = new javax.swing.JTextField();
         PainelBotoes = new javax.swing.JPanel();
         Cadastrar = new javax.swing.JButton();
+        Editar = new javax.swing.JButton();
         Remover = new javax.swing.JButton();
+        Historico = new javax.swing.JButton();
         Empréstimo = new javax.swing.JButton();
         ListaLabel = new javax.swing.JLabel();
         TabelaUsuários = new javax.swing.JScrollPane();
@@ -150,13 +229,50 @@ public class TelaUsuarios extends javax.swing.JPanel {
                 .addGap(10, 10, 10))
         );
 
+        BuscaLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        BuscaLabel.setText("Buscar:");
+
+        TextFieldBusca.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        TextFieldBusca.setToolTipText("Digite para filtrar por nome, CPF, email ou telefone");
+        TextFieldBusca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TextFieldBuscaKeyReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout PainelBuscaLayout = new javax.swing.GroupLayout(PainelBusca);
+        PainelBusca.setLayout(PainelBuscaLayout);
+        PainelBuscaLayout.setHorizontalGroup(
+            PainelBuscaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelBuscaLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(BuscaLabel)
+                .addGap(10, 10, 10)
+                .addComponent(TextFieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        PainelBuscaLayout.setVerticalGroup(
+            PainelBuscaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelBuscaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(BuscaLabel)
+                .addComponent(TextFieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
         Cadastrar.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         Cadastrar.setText("Cadastrar");
         Cadastrar.addActionListener(this::CadastrarActionPerformed);
 
+        Editar.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        Editar.setText("Editar");
+        Editar.addActionListener(this::EditarActionPerformed);
+
         Remover.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         Remover.setText("Remover");
         Remover.addActionListener(this::RemoverActionPerformed);
+
+        Historico.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        Historico.setText("Histórico");
+        Historico.addActionListener(this::HistoricoActionPerformed);
 
         Empréstimo.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         Empréstimo.setText("Empréstimo");
@@ -168,20 +284,25 @@ public class TelaUsuarios extends javax.swing.JPanel {
             PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PainelBotoesLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(Cadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
-                .addComponent(Remover, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
-                .addComponent(Empréstimo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Cadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addComponent(Editar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addComponent(Remover, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addComponent(Historico, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addComponent(Empréstimo, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         PainelBotoesLayout.setVerticalGroup(
             PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelBotoesLayout.createSequentialGroup()
-                .addGroup(PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Cadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Remover, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Empréstimo, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(PainelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(Cadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Editar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Remover, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Historico, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Empréstimo, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         ListaLabel.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
@@ -222,6 +343,7 @@ public class TelaUsuarios extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Topo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(PainelBusca, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(PainelBotoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ListaLabel)
                     .addComponent(TabelaUsuários, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -233,16 +355,22 @@ public class TelaUsuarios extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(Topo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15)
+                .addComponent(PainelBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
                 .addComponent(PainelBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
                 .addComponent(ListaLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(TabelaUsuários, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                .addComponent(TabelaUsuários, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         this.setPreferredSize(new java.awt.Dimension(800, 560));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void TextFieldBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextFieldBuscaKeyReleased
+        aplicarFiltro();
+    }//GEN-LAST:event_TextFieldBuscaKeyReleased
 
     private void CadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CadastrarActionPerformed
         java.awt.Container parent = this.getParent();
@@ -269,13 +397,18 @@ public class TelaUsuarios extends javax.swing.JPanel {
     }//GEN-LAST:event_VoltarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel BuscaLabel;
     private javax.swing.JButton Cadastrar;
+    private javax.swing.JButton Editar;
     private javax.swing.JButton Empréstimo;
+    private javax.swing.JButton Historico;
     private javax.swing.JLabel Informativo;
     private javax.swing.JLabel ListaLabel;
     private javax.swing.JPanel PainelBotoes;
+    private javax.swing.JPanel PainelBusca;
     private javax.swing.JButton Remover;
     private javax.swing.JScrollPane TabelaUsuários;
+    private javax.swing.JTextField TextFieldBusca;
     private javax.swing.JPanel Topo;
     private javax.swing.JButton Voltar;
     private javax.swing.JTable jTable1;
