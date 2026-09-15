@@ -25,7 +25,7 @@ public class TelaRelatorios extends javax.swing.JPanel {
     public TelaRelatorios() {
         initComponents();
         atualizarResumo();
-        carregarTodosEmprestimos(); // já mostra todos ao abrir
+        carregarTodosEmprestimos();
     }
 
     private void atualizarResumo() {
@@ -162,7 +162,7 @@ public class TelaRelatorios extends javax.swing.JPanel {
         escreverArquivo(f, sb.toString());
     }
 
-    // Exporta empréstimos; se mes == -1, exporta TODOS
+    // Exporta empréstimos; se mes == -1, exporta TODOS (ativos + devolvidos)
     private void exportarEmprestimos(int mes, int ano) {
         String nomeArquivo;
         String periodoTexto;
@@ -189,7 +189,8 @@ public class TelaRelatorios extends javax.swing.JPanel {
         List<Usuario> usuarios = TelaUsuarios.getUsuarios();
 
         for (Usuario u : usuarios) {
-            for (Emprestimo e : u.getEmprestimosAtivos()) {
+            // Percorre TODOS os empréstimos (ativos + devolvidos)
+            for (Emprestimo e : u.getEmprestimosLista()) {
 
                 boolean incluir;
                 if (mes == -1) {
@@ -205,7 +206,15 @@ public class TelaRelatorios extends javax.swing.JPanel {
                     sb.append("   Usuário: ").append(u.getNome()).append("\n");
                     sb.append("   Data do empréstimo: ").append(e.getDataEmprestimo().format(FORMATO_DATA)).append("\n");
                     sb.append("   Devolução prevista: ").append(e.getDataPrevistaDevolucao().format(FORMATO_DATA)).append("\n");
-                    sb.append("   Status: ").append(e.isDevolvido() ? "Devolvido" : "Em aberto").append("\n\n");
+
+                    if (e.isDevolvido()) {
+                        sb.append("   Devolução real: ").append(e.getDataDevolucao().format(FORMATO_DATA)).append("\n");
+                        sb.append("   Status: Devolvido\n\n");
+                    } else if (e.isAtrasado()) {
+                        sb.append("   Status: Em atraso\n\n");
+                    } else {
+                        sb.append("   Status: Em aberto\n\n");
+                    }
                 }
             }
         }
@@ -516,7 +525,6 @@ public class TelaRelatorios extends javax.swing.JPanel {
         String mesStr = TextFieldMes.getText().trim();
         String anoStr = TextFieldAno.getText().trim();
 
-        // Se ambos vazios, mostra todos
         if (mesStr.isEmpty() && anoStr.isEmpty()) {
             carregarTodosEmprestimos();
             return;
@@ -580,7 +588,6 @@ public class TelaRelatorios extends javax.swing.JPanel {
         String mesStr = TextFieldMes.getText().trim();
         String anoStr = TextFieldAno.getText().trim();
 
-        // Se ambos vazios → exportar TODOS
         if (mesStr.isEmpty() && anoStr.isEmpty()) {
             exportarEmprestimos(-1, -1);
             return;

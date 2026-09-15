@@ -35,7 +35,6 @@ public class Emprestimo {
 
     public boolean isDevolvido() { return dataDevolucao != null; }
 
-    // Está atrasado se ainda não foi devolvido e a data prevista já passou
     public boolean isAtrasado() {
         return !isDevolvido() && dataPrevistaDevolucao.isBefore(LocalDate.now());
     }

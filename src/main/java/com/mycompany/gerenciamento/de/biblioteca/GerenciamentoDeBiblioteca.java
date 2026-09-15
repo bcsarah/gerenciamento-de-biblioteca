@@ -49,12 +49,14 @@ public class GerenciamentoDeBiblioteca extends JFrame {
 
         // ----------------------------------------------------
         // LIVROS
+        // Observação: o campo ISBN é int, então usamos apenas os
+        // últimos 9 dígitos do ISBN real (um ISBN-13 não cabe em int).
         // ----------------------------------------------------
-        Livro l1 = new Livro("Dom Casmurro", "Machado de Assis", 1899, 9788535910663L > 0 ? 853591066 : 0);
-        Livro l2 = new Livro("1984", "George Orwell", 1949, 9780451524935L > 0 ? 452152493 : 0);
-        Livro l3 = new Livro("O Senhor dos Anéis", "J.R.R. Tolkien", 1954, 9780618640157L > 0 ? 618640157 : 0);
-        Livro l4 = new Livro("Cem Anos de Solidão", "Gabriel García Márquez", 1967, 9788535907176L > 0 ? 853590717 : 0);
-        Livro l5 = new Livro("Harry Potter e a Pedra Filosofal", "J.K. Rowling", 1997, 9788532511010L > 0 ? 853251101 : 0);
+        Livro l1 = new Livro("Dom Casmurro", "Machado de Assis", 1899, 853591066);
+        Livro l2 = new Livro("1984", "George Orwell", 1949, 452152493);
+        Livro l3 = new Livro("O Senhor dos Anéis", "J.R.R. Tolkien", 1954, 618640157);
+        Livro l4 = new Livro("Cem Anos de Solidão", "Gabriel García Márquez", 1967, 853590717);
+        Livro l5 = new Livro("Harry Potter e a Pedra Filosofal", "J.K. Rowling", 1997, 853251101);
 
         TelaLivros.adicionarLivro(l1);
         TelaLivros.adicionarLivro(l2);
@@ -69,7 +71,6 @@ public class GerenciamentoDeBiblioteca extends JFrame {
         // ----------------------------------------------------
         LocalDate hoje = LocalDate.now();
 
-        // Ana Beatriz — 2 empréstimos
         Emprestimo emp1 = new Emprestimo(l1, u1, hoje.minusDays(3), hoje.plusDays(4));
         u1.adicionarEmprestimo(emp1);
         l1.setDisponivel(false);
@@ -78,7 +79,6 @@ public class GerenciamentoDeBiblioteca extends JFrame {
         u1.adicionarEmprestimo(emp2);
         l2.setDisponivel(false);
 
-        // Carlos Eduardo — 1 empréstimo
         Emprestimo emp3 = new Emprestimo(l3, u2, hoje.minusDays(5), hoje.plusDays(2));
         u2.adicionarEmprestimo(emp3);
         l3.setDisponivel(false);

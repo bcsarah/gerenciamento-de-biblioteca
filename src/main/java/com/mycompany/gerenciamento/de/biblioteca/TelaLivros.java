@@ -68,7 +68,6 @@ public class TelaLivros extends javax.swing.JPanel {
 
         jTable1.setModel(modeloTabela);
 
-        // Reaplica o filtro caso já exista um texto digitado
         sorter = new TableRowSorter<>(modeloTabela);
         jTable1.setRowSorter(sorter);
         aplicarFiltro();
@@ -96,7 +95,6 @@ public class TelaLivros extends javax.swing.JPanel {
             return;
         }
 
-        // Converte para índice do modelo (por causa do sorter)
         int linhaModelo = jTable1.convertRowIndexToModel(linhaView);
 
         String nomeLivro = (String) jTable1.getModel().getValueAt(linhaModelo, 0);
@@ -121,7 +119,6 @@ public class TelaLivros extends javax.swing.JPanel {
         int linhaModelo = jTable1.convertRowIndexToModel(linhaView);
         Livro livro = livros.get(linhaModelo);
 
-        // Pede os novos valores (mantém os atuais como padrão)
         String novoNome = JOptionPane.showInputDialog(this, "Nome:", livro.getNome());
         if (novoNome == null) return;
 

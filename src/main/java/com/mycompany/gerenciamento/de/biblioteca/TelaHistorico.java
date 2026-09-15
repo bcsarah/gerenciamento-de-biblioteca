@@ -36,7 +36,6 @@ public class TelaHistorico extends javax.swing.JPanel {
             }
         };
 
-        // Junta ativos + histórico (todos os empréstimos daquele usuário)
         List<Emprestimo> todos = usuario.getEmprestimosLista();
 
         for (Emprestimo e : todos) {
